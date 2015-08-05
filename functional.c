@@ -51,6 +51,20 @@ int32_t reduce_array(int32_t (*fn)(int32_t, int32_t), array_t *data)
     return val;
 }
 
+double reduce2float(double (*fn)(double, double), uint32_t len, double *data)
+{
+    uint32_t i;
+    double val = data[0];
+
+    for (i = 1; i < len; ++i) {
+        val = fn(val, data[i]);
+    }
+    free(data);
+
+    return val;
+}
+
+
 
 int* mapN(void* array, int len, char*(*callback)(void *in))
 {
@@ -83,6 +97,47 @@ void map_u8(char* array, int len, int(*callback)(int))
   {
      array[i] = callback(array[i]);
   }
+}
+
+double *map2float(void *a_, void *b_, uint32_t size, double(*callback)(double, double))
+{
+  int i;
+  double *a = a_;
+  double *b = b_;
+
+  double *c = malloc(size*sizeof(double));
+
+  for(i = 0; i < size; i++)
+  {
+      if ((b==NULL) && (b==NULL)) {
+        c[i] = callback(0,0);
+      }
+      else {
+        c[i] = callback(a[i], b[i]);
+      }
+      
+
+  }
+
+  return c;
+}
+
+double *iterate(void *buf, double(*fn)(double), uint32_t a, uint32_t size)
+{
+  int i;
+  double *c = buff;
+  if (buf == NULL) {
+    malloc(size*sizeof(double));
+  }
+  for(i = 0; i < size; i++) {
+    if (a) {
+      c[i] = fn(a);
+    }
+    else {
+      c[i] = fn(i);
+    }
+  }
+  return c;
 }
 
 

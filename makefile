@@ -1,6 +1,6 @@
 OBJECTS=functional.o
 CFLAGS = -std=c99 -g -Wall
-LDLIBS=
+LDLIBS=-lm
 CC=gcc
 
 $(P): $(OBJECTS)
