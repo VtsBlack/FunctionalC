@@ -125,7 +125,7 @@ double *map2float(void *a_, void *b_, uint32_t size, double(*callback)(double, d
 double *iterate(void *buf, double(*fn)(double), uint32_t a, uint32_t size)
 {
   int i;
-  double *c = buff;
+  double *c = (double*)buf;
   if (buf == NULL) {
     malloc(size*sizeof(double));
   }
