@@ -162,4 +162,3 @@ array_t *grep(int *in, int len, int (*sel)(int))
 
     return out;
 }
- 
