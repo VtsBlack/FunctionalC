@@ -12,5 +12,6 @@
 
 
 #include    "functional.h"
+#include    "debug.h"
 
 #endif

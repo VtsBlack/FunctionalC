@@ -21,7 +21,8 @@ typedef struct {
  * @brief: Command Table
  */
 const customCmd_t custom_cmd[] = {
-    {eCmd1, "testcmd:"}
+    {eCmd1, "testcmd:"},
+    {eCmd2, "TESTCMD="},
 };
 
 #define NUM_OF_CUSTOM_COMMANDS (sizeof(custom_cmd)/sizeof(customCmd_t))
@@ -42,22 +43,60 @@ customCmdId_e findCustomCmd(const char *toFind,
     uint32_t i = 0;
     for (i=0; i<num_of_commands; i++) {
         if (strncmp(commands[i].cmd, toFind, strlen(commands[i].cmd))==0) {
-            *next = toFind + strlen(commands[i].cmd);
+            *next = (void*)toFind + strlen(commands[i].cmd);
             return commands[i].id;
         }
     }
     return eCmdLast;
 }
 
-int main(void)
+/**
+ * [next_arg Select Next argument must be preceeded with ',']
+ * @param  next [pointer of current position in parsed string]
+ * @return      [true if argument matches else otherwise]
+ */
+bool next_arg(void **next)
+{
+    bool return_val = false;
+    char *ptr = strchr(*next, ',');
+    if (ptr) {
+        ptr++;
+        *next = ptr;
+        return_val = true;
+    }
+    return return_val;
+}
+
+void parser(char *RXBUF)
 {
     void *next;
-    switch (findCustomCmd("testcmd:", &next, custom_cmd, NUM_OF_CUSTOM_COMMANDS)) {
+    switch (findCustomCmd(RXBUF, &next, custom_cmd, NUM_OF_CUSTOM_COMMANDS)) {
         case eCmd1: {
             printf("Custom Cmd1 Found\r\n");
+            printf("argument 1 is %d\r\n", atoi(next));
+            next_arg(&next);
+            printf("argument 2 is %d\r\n", atoi(next));
+
+        } break;
+        case eCmd2: {
+            switch(atoi(next)) {
+                case 1: {
+                    next_arg(&next);
+                    printf("Last Argument is %d\r\n", atoi(next));
+                } break;
+                default: {
+                    printf("Undefined %s\n", (char*)next);
+                }
+            }
         } break;
         default: {
             printf("Cmd not found\r\n");
         }
     }
+}
+
+int main(void)
+{
+    parser("testcmd:4,5");
+    parser("TESTCMD=1,9");
 }
