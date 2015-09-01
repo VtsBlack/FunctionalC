@@ -3,6 +3,22 @@
 
 
 
+/**
+ * \brief [brief description]
+ * \details [long description]
+ * \note [update to support utf8 https://github.com/JulienPalard/is_utf8]
+ * \param msg_ [description]
+ * \return [description]
+ */
+optString_e Option(void *msg_)
+{
+  char *msg = msg_;
+  optString_e return_val = optNULL;
+  if ((msg[0] >= ' ') && (msg[0] <= 0x7F)) {
+    return_val = optString;
+  }
+  return return_val;
+}
 
 /*
   @Example:
