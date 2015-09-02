@@ -22,7 +22,7 @@
 
 int main(void)
 {
-  char values[4] = {4, 3, 1, 2};
+  char values[4] = {4, 0, 1, 2};
     map_u8(values,
                 4,
                 lambda(int, (int b),
@@ -31,6 +31,19 @@ int main(void)
                 }));
 
     
+  printf("Result: %d %d %d %d\r\n", 
+    values[0],
+    values[1],
+    values[2],
+    values[3]
+    );
+map_u8(values, sizeof(values),
+  lambda(int, (int x),
+                {
+                  return x==0?5:x;
+                }));
+
+
   printf("Result: %d %d %d %d\r\n", 
     values[0],
     values[1],

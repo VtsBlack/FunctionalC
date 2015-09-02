@@ -41,6 +41,10 @@ customCmdId_e findCustomCmd(const char *toFind,
                             const uint32_t num_of_commands)
 {
     uint32_t i = 0;
+
+    Stop_If(!toFind, return eCmdLast, "Can't search sting of NULL");
+    Stop_If(!toFind[0], return eCmdLast, "Can't empty string");
+
     for (i=0; i<num_of_commands; i++) {
         if (strncmp(commands[i].cmd, toFind, strlen(commands[i].cmd))==0) {
             *next = (void*)toFind + strlen(commands[i].cmd);
@@ -82,7 +86,7 @@ void parser(char *RXBUF)
             switch(atoi(next)) {
                 case 1: {
                     next_arg(&next);
-                    printf("Last Argument is %d\r\n", atoi(next));
+                    printf("Last Argument %d\r\n", atoi(next));
                 } break;
                 default: {
                     printf("Undefined %s\n", (char*)next);
@@ -98,5 +102,5 @@ void parser(char *RXBUF)
 int main(void)
 {
     parser("testcmd:4,5");
-    parser("TESTCMD=1,9");
+    parser("TESTCMD=1,5");
 }
