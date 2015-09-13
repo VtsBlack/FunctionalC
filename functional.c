@@ -178,3 +178,32 @@ array_t *grep(int *in, int len, int (*sel)(int))
 
     return out;
 }
+
+/**
+ * [FindFirstExtraString description]
+ * @param  MAX             [MAX iterations]
+ * @param  toFind            [String To Find]
+ * @param  extra             [parameter to MatchingF function, third argument]
+ * @param  strGetF           [function to get string, must use malloc inside]
+ * @param  MatchingF         [function to compare two strings, up to configurable len 'like strcmp']
+ * @return                 [index if string toFind is found; -1 otherwise]
+ */
+int32_t FindFirstExtraString(const uint32_t MAX,
+                                char *toFind,
+                                uint32_t extra,
+                                char *(*strGetF)(uint32_t Idx), 
+                                bool(*MatchingF)(char *a, char *b, uint32_t len))
+
+{
+    uint32_t i = 0;
+    for (i=0;i<MAX; i++) {
+        char *ExtraS = (*strGetF)(i);
+        /* handle no memmory */
+        const bool val = ExtraS?(*MatchingF)(toFind, ExtraS, extra):false;
+
+        ExtraS?free(ExtraS):NOP();
+        if (val) {return i;}
+    }
+    return -1;
+}
+
